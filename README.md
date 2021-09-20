@@ -29,8 +29,8 @@ start zookeeper - 	bin/zookeeper-server-start.sh config/zookeeper.properties
 start Kafka server - bin/kafka-server-start.sh config/server.properties
 
 Navigate to the project folder and execute the below command in the terminal.
--> docker-compose up
--> ./gradlew bootRun
+-> docker-compose up and 
+- Run "TargetProductApplication" class or ./gradlew bootrun(in Terminal) to start the application
 
 
 #Endpoints:
