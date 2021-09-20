@@ -15,6 +15,7 @@ Tech Stack :
 - Java 8
 - Lombok
 - Swagger
+- Caching
 
 
 For running the application in your local machine. Please follow the below steps:
