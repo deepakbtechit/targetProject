@@ -10,7 +10,6 @@ Tech Stack :
 - prometheus
 - Grafana
 - Spring webflux
-- DataStax Cassandra
 - Unit testing
 - Java 8
 - Lombok
