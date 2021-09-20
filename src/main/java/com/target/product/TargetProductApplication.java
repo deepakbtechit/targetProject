@@ -1,14 +1,11 @@
-package com.target.targetProject;
+package com.target.product;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cache.annotation.EnableCaching;
-
 
 @SpringBootApplication
-@EnableCaching
-public class TargetProjectApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(TargetProjectApplication.class, args);
-	}
+public class TargetProductApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(TargetProductApplication.class, args);
+    }
 }

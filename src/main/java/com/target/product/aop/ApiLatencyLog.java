@@ -1,4 +1,4 @@
-package com.target.targetProject.aop;
+package com.target.product.aop;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

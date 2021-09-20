@@ -1,9 +1,9 @@
-package com.target.targetProject.controller;
+package com.target.product.controller;
 
-import com.target.targetProject.dao.ProductDao;
-import com.target.targetProject.domain.CurrentPrice;
-import com.target.targetProject.domain.ProductInformation;
-import com.target.targetProject.domain.ProductTable;
+import com.target.product.dao.ProductDao;
+import com.target.product.domain.CurrentPrice;
+import com.target.product.domain.ProductInformation;
+import com.target.product.domain.ProductTable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -36,11 +36,11 @@ class ProductControllerTest {
     public static final String PRODUCT_END_POINT_V1 = "/products";
 
     public List<ProductTable> data() {
-        List<ProductTable> productList = Arrays.asList(new ProductTable(13860428l, new Double(1300.00), LocalDate.now() ),
-                new ProductTable(13860429l, new Double(2300.00), LocalDate.now() ) ,
-                new ProductTable(14860429l, new Double(3300.00), LocalDate.now() ),
-                new ProductTable(15860429l, new Double(3300.00), LocalDate.now() ));
-        return  productList;
+        List<ProductTable> productList = Arrays.asList(new ProductTable(13860428l, new Double(1300.00), LocalDate.now()),
+                new ProductTable(13860429l, new Double(2300.00), LocalDate.now()),
+                new ProductTable(14860429l, new Double(3300.00), LocalDate.now()),
+                new ProductTable(15860429l, new Double(3300.00), LocalDate.now()));
+        return productList;
     }
 
     @BeforeEach
@@ -48,7 +48,7 @@ class ProductControllerTest {
         productDao.deleteAll()
                 .thenMany(Flux.fromIterable(data()))
                 .flatMap(productDao::save)
-                .doOnNext(( productTable -> {
+                .doOnNext((productTable -> {
                 })).blockLast();
 
     }
@@ -56,38 +56,38 @@ class ProductControllerTest {
 
     @Test
     public void getProductTitle() {
-        webTestClient.get().uri(PRODUCT_END_POINT_V1.concat( "/{id}"), "13860428")
+        webTestClient.get().uri(PRODUCT_END_POINT_V1.concat("/{id}"), "13860428")
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody(ProductInformation.class)
                 .consumeWith((response) -> {
-                    ProductInformation  productDetails = response.getResponseBody();
-                        assert productDetails.getId() == 13860428;
-                        assert productDetails.getName() != null;
+                    ProductInformation productDetails = response.getResponseBody();
+                    assert productDetails.getId() == 13860428;
+                    assert productDetails.getName() != null;
                 });
 
     }
 
     @Test
     public void getProductPrice() {
-        webTestClient.get().uri(PRODUCT_END_POINT_V1.concat( "/{id}"), "13860428")
+        webTestClient.get().uri(PRODUCT_END_POINT_V1.concat("/{id}"), "13860428")
                 .exchange().expectStatus().isOk()
                 .expectBody()
-                .jsonPath("$.currentPrice.value",3020.00);
+                .jsonPath("$.currentPrice.value", 3020.00);
     }
 
     @Test
     public void getItem_invalid_path() {
 
-        webTestClient.get().uri(PRODUCT_END_POINT_V1.concat( "/target/{id}"), "138604282323")
+        webTestClient.get().uri(PRODUCT_END_POINT_V1.concat("/target/{id}"), "138604282323")
                 .exchange().expectStatus().is4xxClientError();
     }
 
     @Test
     public void getItem_invalidId() {
 
-        webTestClient.get().uri(PRODUCT_END_POINT_V1.concat( "/{id}"), "138604282323")
+        webTestClient.get().uri(PRODUCT_END_POINT_V1.concat("/{id}"), "138604282323")
                 .exchange().expectStatus().is4xxClientError();
 
     }
@@ -95,7 +95,7 @@ class ProductControllerTest {
     @Test
     public void getItem_idNotFoundInAPI() {
 
-        webTestClient.get().uri(PRODUCT_END_POINT_V1.concat( "/{id}"), "14860429")
+        webTestClient.get().uri(PRODUCT_END_POINT_V1.concat("/{id}"), "14860429")
                 .exchange().expectStatus().is5xxServerError();
 
     }
@@ -103,7 +103,7 @@ class ProductControllerTest {
     @Test
     public void getAllItems() {
 
-        Flux<ProductInformation> itemFlux = webTestClient.get().uri(PRODUCT_END_POINT_V1.concat( "/{id}"), "13860428")
+        Flux<ProductInformation> itemFlux = webTestClient.get().uri(PRODUCT_END_POINT_V1.concat("/{id}"), "13860428")
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
@@ -118,10 +118,10 @@ class ProductControllerTest {
     @Test
     public void updateProduct() {
 
-        CurrentPrice price = new CurrentPrice(new Double(1850), "USD" );
+        CurrentPrice price = new CurrentPrice(new Double(1850), "USD");
         ProductInformation product = new ProductInformation(13860428l, "The Big Lebowski (Blu-ray)", price, null);
 
-        webTestClient.put().uri(PRODUCT_END_POINT_V1.concat( "/{id}"), "13860428")
+        webTestClient.put().uri(PRODUCT_END_POINT_V1.concat("/{id}"), "13860428")
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(product), ProductInformation.class)
                 .exchange()
@@ -133,10 +133,10 @@ class ProductControllerTest {
     @Test
     public void updateItem_invalidId() {
 
-        CurrentPrice price = new CurrentPrice(new Double(850), "USD" );
-        ProductInformation product = new ProductInformation(13860l, "The Big Lebowski (Blu-ray)", price,null);
+        CurrentPrice price = new CurrentPrice(new Double(850), "USD");
+        ProductInformation product = new ProductInformation(13860l, "The Big Lebowski (Blu-ray)", price, null);
 
-        webTestClient.put().uri(PRODUCT_END_POINT_V1.concat( "/{id}"), 13860l)
+        webTestClient.put().uri(PRODUCT_END_POINT_V1.concat("/{id}"), 13860l)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(product), ProductInformation.class)
                 .exchange()

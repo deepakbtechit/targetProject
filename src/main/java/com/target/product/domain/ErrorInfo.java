@@ -1,12 +1,12 @@
-package com.target.targetProject.domain;
+package com.target.product.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ErrorInfo {
     String errorCode;
     String errorDescription;

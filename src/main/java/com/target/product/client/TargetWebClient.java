@@ -1,7 +1,7 @@
-package com.target.targetProject.client;
+package com.target.product.client;
 
-import com.target.targetProject.aop.ApiLatencyLog;
-import com.target.targetProject.domain.ProductDetails;
+import com.target.product.aop.ApiLatencyLog;
+import com.target.product.domain.ProductDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 @Service
 @Slf4j
 @Component
-public class TargetWebClient extends BaseWebClient{
+public class TargetWebClient extends BaseWebClient {
 
     @Value("${api.product.baseurl}")
     String baseUrl;
@@ -46,10 +46,6 @@ public class TargetWebClient extends BaseWebClient{
         return readTimeOut;
     }
 
-    @Override
-    boolean getKeepAlive() {
-        return keepAlive;
-    }
 
     @Override
     String getBaseUrl() {

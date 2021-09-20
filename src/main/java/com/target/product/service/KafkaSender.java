@@ -1,4 +1,4 @@
-package com.target.targetProject.service;
+package com.target.product.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +12,8 @@ public class KafkaSender {
 
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
-    
-    public void send(String message) {
 
+    public void send(String message) {
         kafkaTemplate.send(TARGET_EVENTS, message);
     }
 }

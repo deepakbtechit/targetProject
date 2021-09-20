@@ -1,16 +1,12 @@
-package com.target.targetProject.controller;
+package com.target.product.controller;
 
-import com.target.targetProject.domain.ErrorInfo;
-import com.target.targetProject.domain.ProductDetails;
-import com.target.targetProject.domain.ProductInformation;
-import com.target.targetProject.domain.ProductTable;
-import com.target.targetProject.exceptionHandler.TargetProductException;
-import com.target.targetProject.service.KafkaSender;
-import com.target.targetProject.service.ProductService;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.micrometer.core.annotation.Timed;
+import com.target.product.constant.ProductConstant;
+import com.target.product.domain.ErrorInfo;
+import com.target.product.domain.ProductInformation;
+import com.target.product.domain.ProductTable;
+import com.target.product.service.KafkaSender;
+import com.target.product.service.ProductService;
 import io.micrometer.core.instrument.Metrics;
-import jnr.ffi.annotations.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,8 +21,6 @@ import javax.validation.Valid;
 @Slf4j
 public class ProductController {
 
-    public static final String PRODUCT_DETAILS_API = "GET_PRODUCT_DETAILS_API";
-
     @Autowired
     ProductService productService;
 
@@ -35,17 +29,17 @@ public class ProductController {
 
     @GetMapping("/products/{id}")
     public Mono<ResponseEntity<ProductInformation>> getProductDetails(@PathVariable Long id) {
-        Metrics.counter(PRODUCT_DETAILS_API).increment();
+        Metrics.counter(ProductConstant.PRODUCT_DETAILS_API).increment();
         return productService.getProductResponse(id).flatMap(productResponse -> {
-                    kafkaSender.send("Product details :"+ productResponse);
-                    return Mono.just(ResponseEntity.status(HttpStatus.OK).body(productResponse));
-                }).defaultIfEmpty(ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                .body(new ProductInformation(null,null,null,new ErrorInfo("PRODUCT_NOT_FOUND","No data found in database"))));
+            kafkaSender.send("Product details :" + productResponse);
+            return Mono.just(ResponseEntity.status(HttpStatus.OK).body(productResponse));
+        }).defaultIfEmpty(ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .body(new ProductInformation(null, null, null, new ErrorInfo("PRODUCT_NOT_FOUND", "No data found in database"))));
     }
 
     @PutMapping("/products/{id}")
-    public  Mono<ResponseEntity<ProductTable>>  updateProduct(@PathVariable("id") Long id, @RequestBody @Valid ProductInformation product){
+    public Mono<ResponseEntity<ProductTable>> updateProduct(@PathVariable("id") Long id, @RequestBody @Valid ProductInformation product) {
         return productService.updateProductDetails(id, product).defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ProductTable(null,null,null)));
+                .body(new ProductTable(null, null, null)));
     }
 }

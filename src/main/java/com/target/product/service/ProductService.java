@@ -1,18 +1,16 @@
-package com.target.targetProject.service;
+package com.target.product.service;
 
-import com.target.targetProject.client.TargetWebClient;
-import com.target.targetProject.dao.ProductDao;
-import com.target.targetProject.domain.CurrentPrice;
-import com.target.targetProject.domain.ProductDetails;
-import com.target.targetProject.domain.ProductInformation;
-import com.target.targetProject.domain.ProductTable;
-import com.target.targetProject.exceptionHandler.TargetProductException;
+import com.target.product.client.TargetWebClient;
+import com.target.product.dao.ProductDao;
+import com.target.product.domain.CurrentPrice;
+import com.target.product.domain.ProductDetails;
+import com.target.product.domain.ProductInformation;
+import com.target.product.domain.ProductTable;
+import com.target.product.exceptionHandler.TargetProductException;
 import io.micrometer.core.instrument.Metrics;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -32,11 +30,11 @@ public class ProductService {
     @Autowired
     ProductDao productDao;
 
-    public Mono<ProductInformation> getProductResponse(Long id){
+    public Mono<ProductInformation> getProductResponse(Long id) {
         return productDao.findById(id).log()
                 .flatMap(productFromDb -> {
                     return targetWebClient.getProductDescription(id).flatMap(productFromApi -> {
-                        return getProductDetails(productFromApi,productFromDb);
+                        return getProductDetails(productFromApi, productFromDb);
                     });
                 })
                 .doOnError(throwable -> {
@@ -53,14 +51,14 @@ public class ProductService {
             productTable.setDate(LocalDate.now());
             return productDao.save(productTable);
         }).map(productTable -> {
-            log.info("ProductService:: method=updateProductDetails,ProductId="+ productId +"  status=success");
+            log.info("ProductService:: method=updateProductDetails,ProductId=" + productId + "  status=success");
             return new ResponseEntity<>(productTable, HttpStatus.OK);
         });
 
     }
 
     private Mono<ProductInformation> getProductDetails(ProductDetails product, ProductTable productFromDb) {
-        ProductInformation response = new ProductInformation(productFromDb.getProductId(), product.getProduct().getItem().getProductDescription().getTitle(),new CurrentPrice(productFromDb.getPrice(),"USD"),null);
+        ProductInformation response = new ProductInformation(productFromDb.getProductId(), product.getProduct().getItem().getProductDescription().getTitle(), new CurrentPrice(productFromDb.getPrice(), "USD"), null);
         return Mono.just(response);
     }
 }

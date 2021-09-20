@@ -1,20 +1,24 @@
 spring:
   data:
     cassandra:
-      contact-points: ["host.docker.internal"]
+      contact-points: [ "host.docker.internal" ]
       port: 9042
+      keyspace-name: myretail
       local-datacenter: datacenter1
 api:
   product:
-    baseurl:  https://redsky.target.com
-    url : /v2/pdp/tcin/{productId}
+    baseurl: https://redsky.target.com
+    url: /v3/pdp/tcin/{productId}
     connectionTimeOut: 1000
     readTimeOut: 4000
-    keepAlive : true
-
 management:
+  health:
+    circuitbreakers:
+      enabled: true
   endpoints:
     web:
       exposure:
         include: "*"
-
+  endpoint:
+    health:
+      show-details: always

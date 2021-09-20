@@ -1,4 +1,4 @@
-package com.target.targetProject.aop;
+package com.target.product.aop;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -18,7 +18,7 @@ public class MetricsAspect {
         Object proceed = joinPoint.proceed();
 
         long executionTime = System.currentTimeMillis() - start;
-        log.error("Target service api elapsed time ="+ (System.currentTimeMillis()-start) );
+        log.error("Target service api elapsed time =" + (System.currentTimeMillis() - start));
         return proceed;
     }
 }

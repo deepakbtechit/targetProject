@@ -1,4 +1,4 @@
-package com.target.targetProject.configuration;
+package com.target.product.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-@EnableCassandraRepositories(basePackages = "com.target.targetProject")
+@EnableCassandraRepositories(basePackages = "com.target.product")
 public class DbConfigAutoStart extends AbstractCassandraConfiguration {
 
     @Override
@@ -24,7 +24,7 @@ public class DbConfigAutoStart extends AbstractCassandraConfiguration {
         return "myretail";
     }
 
-     //Automatically creates a Keyspace if it doesn't exist
+    //Automatically creates a Keyspace if it doesn't exist
     @Override
     protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
         CreateKeyspaceSpecification specification = CreateKeyspaceSpecification
@@ -40,6 +40,6 @@ public class DbConfigAutoStart extends AbstractCassandraConfiguration {
 
     @Override
     public String[] getEntityBasePackages() {
-        return new String[]{"com.target.targetProject"};
+        return new String[]{"com.target.product"};
     }
 }

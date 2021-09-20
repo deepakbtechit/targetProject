@@ -1,4 +1,4 @@
-package com.target.targetProject.domain;
+package com.target.product.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
