@@ -26,9 +26,6 @@ public class TargetWebClient extends BaseWebClient {
     @Value("${api.product.readTimeOut}")
     private int readTimeOut;
 
-    @Value("${api.product.keepAlive}")
-    private Boolean keepAlive;
-
     private static final String ORDER_SERVICE = "orderService";
 
     @ApiLatencyLog
